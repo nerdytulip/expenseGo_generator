@@ -1,0 +1,92 @@
+package crud
+
+import(
+"net/http"
+)
+
+var {{ .sliceofstructure}} []*types.{{ .Struct}}
+
+func Ctx(http.Handler) http.Handler{
+
+ return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+
+ 		ID := chi.URLParam(request, "id")
+ 		id,_:=strconv.Atoi(ID)
+ 		for _,{{ .Struct}} := range slice_{{ .Struct}}{
+ 		//TODO implementation
+ 		}
+
+ 	})
+
+
+}
+
+func Create (writer http.ResponseWriter , request *http.Request){
+var req requests.CreateRequest
+
+	err := render.Bind(request, &req)
+	if err != nil {
+		render.Render(writer, request, errors.ErrInvalidRequest(err))
+		return
+	}
+
+	//TODO implementation
+
+		j, _ := json.Marshal(req.{{ .Struct}})
+    	writer.Header().Set("Content-Type", "application/json")
+    	writer.WriteHeader(http.StatusCreated)
+
+    	_, _ = fmt.Fprintf(writer, `{"success": true, "data": %v}`, string(j))
+
+}
+func GetAll (writer http.ResponseWriter , request *http.Request){
+
+err := render.Render(writer, request, responses.ListExpenses({{ .sliceofstructure}}))
+ if err != nil{
+		render.Render(writer,request,errors.ErrRender(err))
+		return
+	}
+
+}
+func Update (writer http.ResponseWriter , request *http.Request){
+
+ {{ .varname}} := request.Context().Value("{{ .varname}}").(types.{{ .Struct}})
+
+ var req requests.UpdateRequest
+ err:=render.Bind(request,&req)
+ if err != nil {
+ 		render.Render(writer,request,errors.ErrRender(err))
+ 		return
+ 	}
+
+ 	//TODO implementation
+
+ if err = render.Render(writer, request, responses.Listexpense({{ .varname}})) ; err != nil{
+  			render.Render(writer,request,errors.ErrRender(err))
+  			return
+
+  	}
+
+}
+func GetOne (writer http.ResponseWriter , request *http.Request){
+ {{ .varname}} := request.Context().Value("{{ .varname}}").(types.{{ .Struct}})
+
+ if err = render.Render(writer, request, responses.Listexpense({{ .varname}})) ; err != nil{
+   			render.Render(writer,request,errors.ErrRender(err))
+   			return
+
+   	}
+
+}
+
+func Delete (writer http.ResponseWriter , request *http.Request){
+ {{ .varname}} := request.Context().Value("{{ .varname}}").(types.{{ .Struct}})
+ //TODO implementation
+ err := render.Render(writer, request, responses.ListExpenses({{ .sliceofstructure}}))
+ if err != nil{
+ 		render.Render(writer,request,errors.ErrRender(err))
+ 		return
+ 	}
+
+
+}

@@ -1,0 +1,37 @@
+package responses
+
+import(
+	"net/http"
+)
+
+type ListResponse struct{
+      *{{.Struct}}
+}
+
+
+func Listexpense( {{.varname}} *{{.Struct}}) *ListResponse{
+
+ resp := &ListResponse{ {{.Struct}} : {{.varname}} }
+ return resp
+
+}
+
+func (ListResponse) Render(w http.ResponseWriter, r *http.Request) error {
+   return nil
+}
+
+type ListResponses struct{
+  {{.Struct}} []*{{.Struct}}
+}
+
+func ListExpenses ( {{.varname}} []*{{.Struct}} ) *ListResponses{
+    resp := &ListResponse{ {{.Struct}} : {{.varname}} }
+     return resp
+}
+
+func (ListResponses) Render(w http.ResponseWriter, r *http.Request) error {
+   return nil
+}
+
+
+
