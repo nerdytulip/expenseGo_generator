@@ -1,7 +1,6 @@
 package types
 
-
-//go:generate ../main -structurename=Expense
+//go:generate ../main -structurename=Expense -variablename=expense -slicevar=expenses
 
 
 import (

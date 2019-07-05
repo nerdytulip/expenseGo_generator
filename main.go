@@ -11,26 +11,28 @@ import (
 
 type MetaData struct {
 	Struct string
-	//varname string
-	//sliceofstructure string
+	Varname string
+	Sliceofstructure string
 }
 
 
 func main() {
 	var struc string
+	var varname string
+	var slice_Structure string
 
 	flag.StringVar(&struc,"structurename","","name of the structure")
-	//var_name := strings.ToLower(struc)
-	//flag.StringVar(&var_name,"variable name",var_name,"name of the variable for response")
+	//varname := strings.ToLower(struc)
+	flag.StringVar(&varname,"variablename", "" ,"name of the types variable")
 	//slice_Structure := "slice_" + var_name
-	//flag.StringVar(&slice_Structure,"variable name",slice_Structure,"name of the variable for response")
+	flag.StringVar(&slice_Structure,"slicevar","","name of the slice variable")
 	flag.Parse()
 	box :=packr.New("temp","./templates")
-	t,err := box.FindString("request.gotpl")
+	t,err := box.FindString("response.gotpl")
 	if err != nil {
 	  log.Fatal(err)
 	}
-	tr,err := template.New("request").Parse(t)
+	tr,err := template.New("response").Parse(t)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,13 +40,12 @@ func main() {
 
 	data:=MetaData{
 		Struct:struc,
-		//varname:var_name,
-		//sliceofstructure:slice_Structure,
-
+		Varname:varname,
+		Sliceofstructure:slice_Structure,
 	}
 
-	filereq,err :=os.Create("request.go")
-	err =tr.Execute(filereq,data)
+	fileres,err :=os.Create("response.go")
+	err =tr.Execute(fileres,data)
 	if err != nil {
 		fmt.Println(err)
 	}
