@@ -1,6 +1,6 @@
 package types
 
-//go:generate ../main -structurename=Expense -variablename=expense -slicevar=expenses
+//go:generate ../main -structurename=Expense -variablename=expense -slicevar=expenses -dbname=expensedb -collname=expensecoll
 
 
 import (

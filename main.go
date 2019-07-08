@@ -13,6 +13,8 @@ type MetaData struct {
 	Struct string
 	Varname string
 	Sliceofstructure string
+	DBname string
+	Collname string
 }
 
 
@@ -20,35 +22,17 @@ func main() {
 	var struc string
 	var varname string
 	var slice_Structure string
+	var database_name string
+	var collection_name string
 
 	flag.StringVar(&struc,"structurename","","name of the structure")
 	//varname := strings.ToLower(struc)
 	flag.StringVar(&varname,"variablename", "" ,"name of the types variable")
 	//slice_Structure := "slice_" + var_name
 	flag.StringVar(&slice_Structure,"slicevar","","name of the slice variable")
+	flag.StringVar(&database_name,"dbname","","name od database")
+	flag.StringVar(&collection_name,"collname","","name of collection")
 	flag.Parse()
-	//box :=packr.New("temp","./templates")
-	//t,err := box.FindString("routes.gotpl")
-	//if err != nil {
-	//  log.Fatal(err)
-	//}
-	//tr,err := template.New("routes").Parse(t)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//
-	//
-	//data:=MetaData{
-	//	Struct:struc,
-	//	Varname:varname,
-	//	Sliceofstructure:slice_Structure,
-	//}
-	//
-	//fileres,err :=os.Create("routes.go")
-	//err =tr.Execute(fileres,data)
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
 
 
 	box :=packr.New("temp","./templates")
@@ -100,6 +84,8 @@ func main() {
 		Struct:struc,
 		Varname:varname,
 		Sliceofstructure:slice_Structure,
+		DBname:database_name,
+		Collname:collection_name,
 	}
 	filecrud,err :=os.Create("crud.go")
 	fileroutes,err :=os.Create("routes.go")
