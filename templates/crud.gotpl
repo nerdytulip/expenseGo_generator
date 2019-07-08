@@ -1,10 +1,19 @@
-package crud
+package types
 
 import(
 "net/http"
+"encoding/json"
+"fmt"
+"strconv"
+"github.com/go-chi/render"
+"github.com/go-chi/chi"
 )
 
-var {{ .sliceofstructure}} []*types.{{ .Struct}}
+
+var {{ .Sliceofstructure}} []*{{ .Struct}}
+
+
+
 
 func Ctx(http.Handler) http.Handler{
 
@@ -12,7 +21,7 @@ func Ctx(http.Handler) http.Handler{
 
  		ID := chi.URLParam(request, "id")
  		id,_:=strconv.Atoi(ID)
- 		for _,{{ .Struct}} := range slice_{{ .Struct}}{
+ 		for _,{{ .Struct}} := range {{ .Sliceofstructure}}{
  		//TODO implementation
  		}
 
@@ -22,11 +31,11 @@ func Ctx(http.Handler) http.Handler{
 }
 
 func Create (writer http.ResponseWriter , request *http.Request){
-var req requests.CreateRequest
+var req CreateRequest
 
 	err := render.Bind(request, &req)
 	if err != nil {
-		render.Render(writer, request, errors.ErrInvalidRequest(err))
+		render.Render(writer, request, ErrInvalidRequest(err))
 		return
 	}
 
@@ -41,38 +50,38 @@ var req requests.CreateRequest
 }
 func GetAll (writer http.ResponseWriter , request *http.Request){
 
-err := render.Render(writer, request, responses.ListExpenses({{ .sliceofstructure}}))
+err := render.Render(writer, request, ListExpenses({{ .Sliceofstructure}}))
  if err != nil{
-		render.Render(writer,request,errors.ErrRender(err))
+		render.Render(writer,request,ErrRender(err))
 		return
 	}
 
 }
 func Update (writer http.ResponseWriter , request *http.Request){
 
- {{ .varname}} := request.Context().Value("{{ .varname}}").(types.{{ .Struct}})
+ {{ .Varname}} := request.Context().Value("{{ .Varname}}").({{ .Struct}})
 
- var req requests.UpdateRequest
+ var req UpdateRequest
  err:=render.Bind(request,&req)
  if err != nil {
- 		render.Render(writer,request,errors.ErrRender(err))
+ 		render.Render(writer,request,ErrRender(err))
  		return
  	}
 
  	//TODO implementation
 
- if err = render.Render(writer, request, responses.Listexpense({{ .varname}})) ; err != nil{
-  			render.Render(writer,request,errors.ErrRender(err))
+ if err = render.Render(writer, request, Listexpense(&{{ .Varname}})) ; err != nil{
+  			render.Render(writer,request,ErrRender(err))
   			return
 
   	}
 
 }
 func GetOne (writer http.ResponseWriter , request *http.Request){
- {{ .varname}} := request.Context().Value("{{ .varname}}").(types.{{ .Struct}})
+ {{ .Varname}} := request.Context().Value("{{ .Varname}}").({{ .Struct}})
 
- if err = render.Render(writer, request, responses.Listexpense({{ .varname}})) ; err != nil{
-   			render.Render(writer,request,errors.ErrRender(err))
+ if err := render.Render(writer, request, Listexpense(&{{ .Varname}})) ; err != nil{
+   			render.Render(writer,request,ErrRender(err))
    			return
 
    	}
@@ -80,11 +89,11 @@ func GetOne (writer http.ResponseWriter , request *http.Request){
 }
 
 func Delete (writer http.ResponseWriter , request *http.Request){
- {{ .varname}} := request.Context().Value("{{ .varname}}").(types.{{ .Struct}})
+ {{ .Varname}} := request.Context().Value("{{ .Varname}}").({{ .Struct}})
  //TODO implementation
- err := render.Render(writer, request, responses.ListExpenses({{ .sliceofstructure}}))
+ err := render.Render(writer, request, ListExpenses({{ .Sliceofstructure}}))
  if err != nil{
- 		render.Render(writer,request,errors.ErrRender(err))
+ 		render.Render(writer,request,ErrRender(err))
  		return
  	}
 

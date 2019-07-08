@@ -27,12 +27,70 @@ func main() {
 	//slice_Structure := "slice_" + var_name
 	flag.StringVar(&slice_Structure,"slicevar","","name of the slice variable")
 	flag.Parse()
+	//box :=packr.New("temp","./templates")
+	//t,err := box.FindString("routes.gotpl")
+	//if err != nil {
+	//  log.Fatal(err)
+	//}
+	//tr,err := template.New("routes").Parse(t)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//
+	//data:=MetaData{
+	//	Struct:struc,
+	//	Varname:varname,
+	//	Sliceofstructure:slice_Structure,
+	//}
+	//
+	//fileres,err :=os.Create("routes.go")
+	//err =tr.Execute(fileres,data)
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
+
+
 	box :=packr.New("temp","./templates")
-	t,err := box.FindString("response.gotpl")
+	t,err := box.FindString("crud.gotpl")
 	if err != nil {
-	  log.Fatal(err)
+		log.Fatal(err)
 	}
-	tr,err := template.New("response").Parse(t)
+	t1,err := box.FindString("request.gotpl")
+	if err != nil {
+		log.Fatal(err)
+	}
+	t2,err := box.FindString("response.gotpl")
+	if err != nil {
+		log.Fatal(err)
+	}
+	t3,err := box.FindString("routes.gotpl")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	t4,err := box.FindString("errors.gotpl")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	tc,err := template.New("crud").Parse(t)
+	if err != nil {
+		log.Fatal(err)
+	}
+	tr,err := template.New("routes").Parse(t3)
+	if err != nil {
+		log.Fatal(err)
+	}
+	tres,err := template.New("response").Parse(t2)
+	if err != nil {
+		log.Fatal(err)
+	}
+	treq,err := template.New("request").Parse(t1)
+	if err != nil {
+		log.Fatal(err)
+	}
+	terr,err := template.New("errors").Parse(t4)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,10 +101,30 @@ func main() {
 		Varname:varname,
 		Sliceofstructure:slice_Structure,
 	}
-
+	filecrud,err :=os.Create("crud.go")
+	fileroutes,err :=os.Create("routes.go")
+	filereq,err :=os.Create("request.go")
 	fileres,err :=os.Create("response.go")
-	err =tr.Execute(fileres,data)
+	fileerr,err :=os.Create("errors.go")
+	err =tc.Execute(filecrud,data)
+	if err != nil {
+		fmt.Println(err)
+	}
+	err =tr.Execute(fileroutes,data)
+	if err != nil {
+		fmt.Println(err)
+	}
+	err =tres.Execute(fileres,data)
+	if err != nil {
+		fmt.Println(err)
+	}
+	err =treq.Execute(filereq,data)
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = terr.Execute(fileerr,data)
 	if err != nil {
 		fmt.Println(err)
 	}
 }
+

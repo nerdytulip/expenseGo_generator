@@ -1,6 +1,14 @@
-package Router
+package types
 
-func RouteHandler{
+import(
+
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
+	"log"
+	"net/http"
+)
+
+func RouteHandler(){
   r := chi.NewRouter()
 
 	r.Use(middleware.RequestID)
@@ -9,14 +17,14 @@ func RouteHandler{
 	r.Use(middleware.Recoverer)
 
 	r.Route("/expenses", func(r chi.Router) {
-		r.Post("/", CreateExpense)
-		r.Get("/", ListAllExpense)
+		r.Post("/", Create)
+		r.Get("/", GetAll)
 
 		r.Route("/{id}", func(r chi.Router) {
-			r.Use(ExpenseContext)
-			r.Get("/", ListOneExpense)
-			r.Put("/", UpdateExpense)
-			r.Delete("/", DeleteExpense)
+			r.Use(Ctx)
+			r.Get("/", GetOne)
+			r.Put("/", Update)
+			r.Delete("/", Delete)
 		})
 	})
 
